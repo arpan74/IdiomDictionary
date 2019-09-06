@@ -84,7 +84,7 @@ app.get("/random/api/", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   MongoClient.connect(
     CONNECTION_URL,
     { useNewUrlParser: true },
