@@ -1,44 +1,77 @@
 <html>
   <head>
+    <%- include("./partials/head") %>
     <script src="/js/main.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
-    <h1>Autocomplete Test!</h1>
-    <input id="input-box" type="text" />
-    <ul id="possible-matches"></ul>
-    <h1>Test?</h1>
+    <%- include("./partials/header") %>
+    <div class="mt-5"></div>
+    <div class="container">
+      <div class="row">
+        <h1>Search for an Idiom</h1>
+      </div>
+      <div class="mt-2"></div>
+      <div class="row">
+        <div class="input-group mb-3">
+          <input
+            id="input-box"
+            type="text"
+            class="form-control"
+            aria-label="Default"
+            aria-describedby="inputGroup-sizing-default"
+          />
+        </div>
+        <div class="row">
+          <ul id="possible-matches" class="list-group"></ul>
+        </div>
+      </div>
+    </div>
     <script>
-      console.log("Hello!");
-      var collection = "<%= idioms %>";
       var input = document.querySelector("#input-box");
-      input.addEventListener("keypress", e => {
-        value = input.value + String.fromCharCode(e.keyCode);
-        console.log(value);
+      input.addEventListener("keyup", e => {
+        value = document.querySelector("#input-box").value;
+        if (value.length === 0) {
+          list = document.querySelector("#possible-matches");
+          while (list.firstChild) {
+            list.removeChild(list.firstChild);
+          }
+          return;
+        }
         list = document.querySelector("#possible-matches");
 
+        // Function to create the list of suggestions from the JSON object sent back by axios.get
+        // and add it to the hompage
         const createList = value => {
           if (value.length > 10) {
             value = value.slice(0, 10);
           }
           value.forEach(item => {
             listItem = document.createElement("li");
-            text = document.createTextNode(item.name);
-            listItem.appendChild(text);
+            listItem.className = "list-group-item";
+            idiomLink = document.createElement("a");
+            const url = "i/" + item.name.split(" ").join("-");
+            idiomLink.setAttribute("href", url);
+            idiomLink.textContent = item.name;
+            listItem.appendChild(idiomLink);
             list.appendChild(listItem);
           });
         };
 
         const getIdioms = axios.get("/search/api/" + value);
-        getIdioms.then(value => {
-          list = document.querySelector("#possible-matches");
-          while (list.firstChild) {
-            list.removeChild(list.firstChild);
+        getIdioms.then(suggestions => {
+          value = suggestions.data[suggestions.data.length - 1];
+          if (value === document.querySelector("#input-box").value) {
+            suggestions.data.pop();
+            list = document.querySelector("#possible-matches");
+            while (list.firstChild) {
+              list.removeChild(list.firstChild);
+            }
+            createList(suggestions.data);
           }
-          console.log(value.data);
-          createList(value.data);
         });
       });
     </script>
+    <%- include("./partials/footer") %>
   </body>
 </html>

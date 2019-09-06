@@ -1,25 +1,42 @@
 <html>
   <head>
-    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+    <%- include("./partials/head") %>
   </head>
   <body>
-    <h1><%= idiom.name %></h1>
+    <%- include("./partials/header") %>
+    <div class="mt-5"></div>
+    <div class="container">
+      <div class="row">
+        <h1 class="text-capitalize"><%= idiom.name %></h1>
+      </div>
+      <hr />
+      <div class="row">
+        <h3>Meaning</h3>
+      </div>
+      <div class="row">
+        <ul>
+          <% for (var meaning in idiom.meanings){ %>
+          <li><%= idiom.meanings[meaning] %></li>
+          <%}%>
+        </ul>
+      </div>
+      <div class="row">
+        <h3>Examples</h3>
+      </div>
+      <div class="row">
+        <ul>
+          <% for (var example in idiom.examples){ %>
+          <li><%= idiom.examples[example] %></li>
+          <%}%>
+        </ul>
+      </div>
 
-    <h3>Meaning</h3>
-    <ul>
-      <% for (var meaning in idiom.meanings){ %>
-      <li><%= idiom.meanings[meaning] %></li>
-      <%}%>
-    </ul>
-
-    <h3>Examples</h3>
-    <ul>
-      <% for (var example in idiom.examples){ %>
-      <li><%= idiom.examples[example] %></li>
-      <%}%>
-    </ul>
-
-    <h3>Origin</h3>
-    <p><%=idiom.origin %></p>
+      <div class="row">
+        <h3>Origin</h3>
+      </div>
+      <div class="row">
+        <p><%=idiom.origin %></p>
+      </div>
+    </div>
   </body>
 </html>
