@@ -84,6 +84,23 @@ app.get("/random/api/", (req, res) => {
   });
 });
 
+app.get("/completelist/:value", (req, res) => {
+  collection.count({}).then(numTotal => {
+    value = req.params.value * 10;
+    if (value > numTotal) {
+      value = 0;
+    }
+    collection
+      .find({})
+      .skip(value)
+      .limit(10)
+      .toArray((error, result) => {
+        console.log(result);
+        res.render("completeList.ejs", { idioms: result, page: value / 10 });
+      });
+  });
+});
+
 app.listen(process.env.PORT || 3000, () => {
   MongoClient.connect(
     CONNECTION_URL,
