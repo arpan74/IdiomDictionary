@@ -1,42 +1,72 @@
 <html>
   <head>
     <%- include("./partials/head") %>
+    <script src="/js/main.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <%- include("./partials/header") %>
-    <div class="mt-5"></div>
-    <div class="container">
-      <div class="row">
-        <h1 class="text-capitalize"><%= idiom.name %></h1>
-      </div>
-      <hr />
-      <div class="row">
-        <h3>Meaning</h3>
-      </div>
-      <div class="row">
-        <ul>
-          <% for (var meaning in idiom.meanings){ %>
-          <li><%= idiom.meanings[meaning] %></li>
-          <%}%>
-        </ul>
-      </div>
-      <div class="row">
-        <h3>Examples</h3>
-      </div>
-      <div class="row">
-        <ul>
-          <% for (var example in idiom.examples){ %>
-          <li><%= idiom.examples[example] %></li>
-          <%}%>
-        </ul>
-      </div>
-
-      <div class="row">
-        <h3>Origin</h3>
-      </div>
-      <div class="row">
-        <p><%=idiom.origin %></p>
+    <div class="w-full h-full flex flex-col">
+      <div class="flex m-4 justify-center">
+        <h1 class="text-4xl mr-4">Search for an Idiom</h1>
+        <input
+          id="input-box"
+          type="text"
+          class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-1/2 appearance-none leading-normal"
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-default"
+        />
+        <ul
+          id="possible-matches"
+          class="absolute top mt-16 bg-blue-100 w-1/2 ml-40"
+        ></ul>
       </div>
     </div>
+    <script>
+      var input = document.querySelector("#input-box");
+      input.addEventListener("keyup", e => {
+        value = document.querySelector("#input-box").value;
+        if (value.length === 0) {
+          list = document.querySelector("#possible-matches");
+          while (list.firstChild) {
+            list.removeChild(list.firstChild);
+          }
+          return;
+        }
+        list = document.querySelector("#possible-matches");
+
+        // Function to create the list of suggestions from the JSON object sent back by axios.get
+        // and add it to the hompage
+        const createList = value => {
+          if (value.length > 10) {
+            value = value.slice(0, 10);
+          }
+          value.forEach(item => {
+            listItem = document.createElement("li");
+            listItem.className = "text-xl border border-solid w-full p-4";
+            idiomLink = document.createElement("a");
+            const url = "i/" + item.name.split(" ").join("-");
+            idiomLink.setAttribute("href", url);
+            idiomLink.textContent = item.name;
+            listItem.appendChild(idiomLink);
+            list.appendChild(listItem);
+          });
+        };
+
+        const getIdioms = axios.get("/search/api/" + value);
+        getIdioms.then(suggestions => {
+          value = suggestions.data[suggestions.data.length - 1];
+          if (value === document.querySelector("#input-box").value) {
+            suggestions.data.pop();
+            list = document.querySelector("#possible-matches");
+            while (list.firstChild) {
+              list.removeChild(list.firstChild);
+            }
+            createList(suggestions.data);
+          }
+        });
+      });
+    </script>
+    <%- include("./partials/footer") %>
   </body>
 </html>

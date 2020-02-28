@@ -6,25 +6,20 @@
   </head>
   <body>
     <%- include("./partials/header") %>
-    <div class="mt-5"></div>
-    <div class="container">
-      <div class="row">
-        <h1>Search for an Idiom</h1>
-      </div>
-      <div class="mt-2"></div>
-      <div class="row">
-        <div class="input-group mb-3">
-          <input
-            id="input-box"
-            type="text"
-            class="form-control"
-            aria-label="Default"
-            aria-describedby="inputGroup-sizing-default"
-          />
-        </div>
-        <div class="row">
-          <ul id="possible-matches" class="list-group"></ul>
-        </div>
+    <div class="w-full h-full flex flex-col">
+      <div class="flex m-4 justify-center">
+        <h1 class="text-4xl mr-4">Search for an Idiom</h1>
+        <input
+          id="input-box"
+          type="text"
+          class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-1/2 appearance-none leading-normal"
+          aria-label="Default"
+          aria-describedby="inputGroup-sizing-default"
+        />
+        <ul
+          id="possible-matches"
+          class="absolute top mt-16 bg-blue-100 w-1/2 ml-40"
+        ></ul>
       </div>
     </div>
     <script>
@@ -48,7 +43,7 @@
           }
           value.forEach(item => {
             listItem = document.createElement("li");
-            listItem.className = "list-group-item";
+            listItem.className = "text-xl border border-solid w-full p-4";
             idiomLink = document.createElement("a");
             const url = "i/" + item.name.split(" ").join("-");
             idiomLink.setAttribute("href", url);

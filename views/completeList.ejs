@@ -1,50 +1,35 @@
 <html>
   <head>
     <%- include("./partials/head") %>
-    <style>
-      a {
-        color: white;
-      }
-    </style>
   </head>
   <body>
     <%- include("./partials/header") %>
-    <div class="mt-5"></div>
-    <% for (var idiom in idioms){ %>
-    <div class="container">
-      <div class="card">
-        <div class="card-body">
-          <div class="container">
-            <div class="row">
-              <h4 class="text-capitalize"><%= idioms[idiom].name %></h4>
-            </div>
-            <div class="row">
-              <ul>
-                <li><%= idioms[idiom].meanings[0] %></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <%}%>
-    <div class="mt-5"></div>
-    <div class="container">
-      <div class="row nextButtons">
-        <% if (page > 0) { %>
-        <button
-          class="btn btn-primary"
-          onclick="window.location.href='/completeList/<%- page - 1 _%>'"
-        >
-          Previous
-        </button>
+    <div class="mt-4 w-3/4 m-auto">
+      <h1 class="text-4xl capitalize">Complete List of Idioms</h1>
+      <hr />
+      <div class="mx-4">
+        <% for (var idiom in idioms){ %>
+        <h1 class="text-xl mt-4 capitalize"><%= idioms[idiom].name %></h1>
+        <ul>
+          <li class="mx-4"><%= idioms[idiom].meanings[0] %></li>
+        </ul>
         <%}%>
-        <button
-          class="btn btn-primary"
-          onclick="window.location.href='/completeList/<%- page + 1 _%>'"
-        >
-          Next
-        </button>
+        <div class="container mt-4 flex justify-center">
+          <% if (page > 0) { %>
+          <button
+            class="bg-teal-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm m-4"
+            onclick="window.location.href='/completeList/<%- page - 1 _%>'"
+          >
+            Previous
+          </button>
+          <%}%>
+          <button
+            class="bg-teal-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm m-4"
+            onclick="window.location.href='/completeList/<%- page + 1 _%>'"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </body>
